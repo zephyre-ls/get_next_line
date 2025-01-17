@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:13:36 by lduflot           #+#    #+#             */
-/*   Updated: 2025/01/17 16:09:16 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/01/17 16:55:17 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,9 @@ char	*ft_strjoin(char *str, char *buff)
 {
 	int		i;
 	int		j;
-	int		lens_str;
-	int		lens_buff;
 	char	*dest;
 
-	lens_str = ft_strlen(str);
-	lens_buff = ft_strlen(buff);
-	dest = malloc(sizeof(char) * (lens_str + lens_buff + 1));
+	dest = malloc(sizeof(char) * (ft_strlen(str) + ft_strlen(buff) + 1));
 	if (dest == NULL)
 		return (NULL);
 	i = 0;
@@ -52,8 +48,7 @@ char	*ft_strjoin(char *str, char *buff)
 	while (buff[j] != '\0')
 		dest[i++] = buff[j++];
 	dest[i] = '\0';
-	if (str != NULL)
-		free(str);
+	free(str);
 	return (dest);
 }
 
