@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:13:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/01/17 11:35:52 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/01/17 16:12:11 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,42 +26,42 @@ char	*ft_find_newline(char *str)
 	return (NULL);
 }
 
+int	ft_read_and_add_buffer(char **stash, int fd)
+{
+	char		*buff;
+	int			byte_read;
+
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (buff == NULL)
+		return (-1);
+	byte_read = read(fd, buff, BUFFER_SIZE);
+	if (byte_read > 0)
+	{
+		buff[byte_read] = '\0';
+		*stash = ft_strjoin(*stash, buff);
+	}
+	free(buff);
+	return (byte_read);
+}
 //lit les données et les stocke dans stash.
 //byte_read = nbr d octet lu a chaque appel de read
 // buff = stockage temporaore des donnes lu
 // strjoin = join les nouvelles donne lu au donne deja lu 
+
 char	*ft_readline(char *stash, int fd)
 {
-	char	*buff;
 	char	*newline;
 	int		byte_read;
 
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (buff == NULL)
-		return (NULL);
 	byte_read = 1;
 	newline = ft_find_newline(stash);
 	while (newline == NULL && byte_read > 0)
 	{
-		byte_read = read(fd, buff, BUFFER_SIZE);
-		if (byte_read < 0)
-		{
-			free (buff);
+		byte_read = ft_read_and_add_buffer(&stash, fd);
+		if (byte_read < 0 || stash == NULL)
 			return (NULL);
-		}
-		if (byte_read > 0)
-		{
-			buff[byte_read] = '\0';
-			stash = ft_strjoin(stash, buff);
-			if (stash == NULL)
-			{
-				free(buff);
-				return (NULL);
-			}
-			newline = ft_find_newline(stash);
-		}
+		newline = ft_find_newline(stash);
 	}
-	free(buff);
 	return (stash);
 }
 
@@ -71,7 +71,6 @@ char	*ft_extract_line(char **stash)
 	char	*new_line;
 	char	*tmp_stash;
 	int		len_line;
-	int		i;
 
 	if (*stash == NULL || **stash == '\0')
 		return (NULL);
@@ -82,22 +81,15 @@ char	*ft_extract_line(char **stash)
 		*stash = NULL;
 		return (line);
 	}
-	len_line = (new_line - *stash);
-	len_line = len_line + 1;
+	len_line = (new_line - *stash) + 1;
 	line = malloc(sizeof(char) * (len_line + 1));
-	if (line != NULL)
-	{
-		i = 0;
-		while ((*stash)[i] != '\0' && i < (len_line - 1))
-		{
-			line[i] = (*stash)[i];
-			i++;
-		}
-		line[i] = '\0';
-		tmp_stash = ft_strdup(*stash + len_line);
-		free(*stash);
-		*stash = tmp_stash;
-	}
+	if (line == NULL)
+		return (NULL);
+	ft_memcpy(line, *stash, len_line);
+	line[len_line] = '\0';
+	tmp_stash = ft_strdup(*stash + len_line);
+	free(*stash);
+	*stash = tmp_stash;
 	return (line);
 }
 //stash = stock, reserve, cachette
@@ -117,7 +109,7 @@ char	*get_next_line(int fd)
 	return (line);
 }
 //line = zone memoire qui stock les donnes
-
+/*
 int	main(void)
 {
 	int		fd;
@@ -135,4 +127,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}
+}*/

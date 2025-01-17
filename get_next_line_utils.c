@@ -6,7 +6,7 @@
 /*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:13:36 by lduflot           #+#    #+#             */
-/*   Updated: 2025/01/17 11:19:13 by lduflot          ###   ########.fr       */
+/*   Updated: 2025/01/17 16:09:16 by lduflot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ char	*ft_strjoin(char *str, char *buff)
 {
 	int		i;
 	int		j;
-	int		lens1;
-	int		lens2;
+	int		lens_str;
+	int		lens_buff;
 	char	*dest;
 
-	lens1 = ft_strlen(str);
-	lens2 = ft_strlen(buff);
-	dest = malloc(sizeof(char) * (lens1 + lens2 + 1));
+	lens_str = ft_strlen(str);
+	lens_buff = ft_strlen(buff);
+	dest = malloc(sizeof(char) * (lens_str + lens_buff + 1));
 	if (dest == NULL)
 		return (NULL);
 	i = 0;
@@ -55,6 +55,25 @@ char	*ft_strjoin(char *str, char *buff)
 	if (str != NULL)
 		free(str);
 	return (dest);
+}
+
+char	*ft_memcpy(char *line, char *stash, size_t len_line)
+{
+	char		*tmps;
+	char		*tmpd;
+	size_t		i;
+
+	tmpd = line;
+	tmps = stash;
+	i = 0;
+	if (line == NULL && stash == NULL)
+		return (NULL);
+	while (i < len_line)
+	{
+		tmpd[i] = tmps[i];
+		i++;
+	}
+	return ((char *)line);
 }
 
 char	*ft_strdup(char *str)
