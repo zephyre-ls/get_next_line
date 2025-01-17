@@ -19,6 +19,9 @@ Extrait les lignes complete du buffer de donnéees. Elle cherche ou se termine l
 Lecture d'un bloc de donné à partir d'un fichier. Elle remplie notre buffer pour y stocker les données lu. 
 Puis les ajoute à stash avec ft_strjoin. La fonction va lire jusqu'à la ligne complete/fin du fichier.
 
+    char	*ft_readline(char *stash, int fd);
+Lecture du fichier avec read, alloue un buffer (buff) pour y stocker les données lues. Puis ajout de ses données à stash avec (ft_strjoin).
+
     char	*ft_find_newline(char *str);
 Recherche la premiere occurene ici fin de ligne (\n). Et y retourne un pointeur. Utilisation dans get_next_line pour détecter la fin de la ligne.
 
