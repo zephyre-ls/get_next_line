@@ -1,27 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lduflot <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/17 11:13:25 by lduflot           #+#    #+#             */
-/*   Updated: 2025/01/17 11:27:28 by lduflot          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 /*Fonction ok = MALLOC, FREE, READ
 Return = Contenue de la ligne lue, NULL si rien d autre a lire ou error
-Descriptor = Ecrire unefonction qui retourne une ligne lue 
-depuis un descripteur de fichier
+Descriptor = Ecrire unefonction qui retourne une ligne lue depuis un descripteur de fichier
 GNL_utils = fonction supplementaires necessaire a la realisation de GNL
 Compilation = cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 <files>.c
-Buffer = (tampon en francais) est une zone de memoire utilise 
-pour sotcker temporairement des donnes pendant qu elle sont 
-transferer entredeux endroits 
+Buffer = (tampon en francais) est une zone de memoire utilise pour sotcker temporairement des donnes pendant qu elle sont transferer entredeux endroits 
 INTERDIT = libft, ft lseek, variable globales
-VARIABLE STATIQUE = variable qui conserve sa valeur entre plusieurs appels 
-de fonctions c a d qu elle ne perd pas sa valeur quand la fonction se termine 
+VARIABLE STATIQUE = variable qui conserve sa valeur entre plusieurs appels de fonctions c a d qu elle ne perd pas sa valeur quand la fonction se termine 
 
 ssize_t read(int fd, void *buf, size_t count);
 
@@ -36,15 +22,11 @@ O_RDWR = both
 
 void *buf = pointeur vers une zone de memoire ou les donnes lu seronts stocke 
 size_t count= nombre max d octet a lire 
-lire dans un fichier et stocke dans une variable, a une static donc 
-si je redemande ( byte va prendre apres les 5 premiers byte demander 
-la premiere fois. (Donc comporte une static)
+lire dans un fichier et stocke dans une variable, a une static donc si je redemande ( byte va prendre apres les 5 premiers byte demander la premiere fois. (Donc comporte une static)
 
 Difference entre size_t et ssize_t = 
 	_ size_t = type non signé (unsigned) = que des valeurs positives 
-		ssize_t = type signé les deux valeurs,
-		dans le cas de read utilisations de ssize-t puise renvoie erreur 
-		si jamais n a pas reussis a lire le fichier 
+		ssize_t = type signé les deux valeurs, dans le cas de read utilisations de ssize-t puise renvoie erreur si jamais n a pas reussis a lire le fichier 
 exemple file = Hello$
 							good bye
 buff = après appel = Hello
@@ -69,16 +51,13 @@ char	*ft_find_newline(char *str)
 }
 
 //lit les données et les stocke dans stash.
-//byte_read = nbr d octet lu a chaque appel de read
-// buff = stockage temporaore des donnes lu
-// strjoin = join les nouvelles donne lu au donne deja lu 
 char	*ft_readline(char *stash, int fd)
 {
 	char	*buff;
 	char	*newline;
-	int		byte_read;
-
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	int		byte_read; //nombre d octet lu a chaque appel de read
+	
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));//stockage temporaire des données lu
 	if (buff == NULL)
 		return (NULL);
 	byte_read = 1;
@@ -94,7 +73,7 @@ char	*ft_readline(char *stash, int fd)
 		if (byte_read > 0)
 		{
 			buff[byte_read] = '\0';
-			stash = ft_strjoin(stash, buff);
+			stash = ft_strjoin(stash, buff); //join les nouvelles donnes lues au donnes deja lu
 			if (stash == NULL)
 			{
 				free(buff);
@@ -114,7 +93,7 @@ char	*ft_extract_line(char **stash)
 	char	*tmp_stash;
 	int		len_line;
 	int		i;
-
+	
 	if (*stash == NULL || **stash == '\0')
 		return (NULL);
 	new_line = ft_find_newline(*stash);
@@ -142,15 +121,13 @@ char	*ft_extract_line(char **stash)
 	}
 	return (line);
 }
-//stash = stock, reserve, cachette
-//line = buffer pour lire les donnes
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
-	char		*line;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	static char	*stash; //stash = stock, reserve, cachette.
+	char				*line; //buffer pour lire les données
+	
+	if (fd < 0 || BUFFER_SIZE <= 0) //fichier invalide ou taille buff invalide
 		return (NULL);
 	stash = ft_readline(stash, fd);
 	if (stash == NULL)
@@ -158,13 +135,12 @@ char	*get_next_line(int fd)
 	line = ft_extract_line(&stash);
 	return (line);
 }
-//line = zone memoire qui stock les donnes
 
 int	main(void)
 {
 	int		fd;
-	char	*line;
-
+	char	*line;  // zone memoire pour stock les donnes
+	
 	fd = open("test.txt", O_RDONLY);
 	if (fd < 0)
 		return (1);
